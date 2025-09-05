@@ -6,6 +6,7 @@ const WEATHER_SYSTEM_PROMPT = `Design a beautiful, immersive weather widget that
 CRITICAL REQUIREMENTS:
 - NO INPUT FIELDS OR SEARCH BARS - the location is already provided
 - NO BUTTONS for location changes - this is a display-only widget
+- NO py-6 PADDING on cards - avoid adding py-6 class to any card elements
 - Focus purely on displaying the weather information beautifully
 
 The widget should feature:
@@ -93,16 +94,17 @@ Create a stunning, immersive weather widget that captures the essence of "${movi
       }
     }
 
-    // Create a new chat using the v0 SDK
+    // Always create a new chat - this ensures each widget gets a new dynamic route
     const chat = await v0.chats.create({
       message: enhancedMessage,
     });
 
     // Type assertion for v0 SDK response
-    const chatResponse = chat as { demo: string };
+    const chatResponse = chat as { demo: string; id?: string };
 
     return NextResponse.json({
       demo: chatResponse.demo,
+      chatId: chatResponse.id, // Return the chat ID
     });
   } catch (error) {
     console.error("v0 API Error:", error);
